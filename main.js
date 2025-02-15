@@ -347,6 +347,8 @@ worker.postMessage({ urls: [
 
 worker.onmessage = function(event) {
     allData = event.data;
+    document.getElementById('loadingContainer').style.display = 'none';
+
 
 
 
