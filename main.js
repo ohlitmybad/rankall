@@ -900,6 +900,7 @@ function getRankSuffix(rank) {
     team: selectedPlayerTeam,
     position: selectedPlayerPosition // Include position in the selectedPlayer object
     };
+    displayPlayerRankings(selectedPlayer);
     document.getElementById('spinner').style.display = 'none';
     
     }
@@ -12208,7 +12209,7 @@ searchInput.addEventListener('input', function () {
 
         // Simulate long computation with setTimeout
         setTimeout(() => {
-          displaySelectedPlayer();
+          displaySelectedPlayer(selectedPlayer);
 
           // Hide spinner
           hideSpinner();
