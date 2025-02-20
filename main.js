@@ -12222,7 +12222,11 @@ searchInput.addEventListener('input', function () {
         showSpinner();
 
         // Simulate long computation with setTimeout
-
+        setTimeout(() => {
+            displaySelectedPlayer();
+          // Hide spinner
+          hideSpinner();
+        }, 1000); // Adjust the timeout value as needed
       });
 
       // Bind event listener to ageSelect for selection
