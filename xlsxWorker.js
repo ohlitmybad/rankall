@@ -73,7 +73,6 @@ self.onmessage = async function(event) {
                     continue;
                 }
                 
-                const row = jsonData[i].slice(0, 93); // Trim to 93 columns
                 // Optimize array operations
                 row.splice(2, 0, label); // Insert label at position 2
                 processedData[i] = row;
