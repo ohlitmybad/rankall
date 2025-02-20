@@ -12208,7 +12208,7 @@ searchInput.addEventListener('input', function () {
 
         // Simulate long computation with setTimeout
         setTimeout(() => {
-          displaySelectedPlayer(selectedPlayer);
+          displaySelectedPlayer();
 
           // Hide spinner
           hideSpinner();
