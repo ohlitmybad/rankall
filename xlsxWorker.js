@@ -72,7 +72,7 @@ self.onmessage = async function(event) {
                     processedData[i] = null;
                     continue;
                 }
-                const row = jsonData[i]
+                const row = jsonData[i];
                 // Optimize array operations
                 row.splice(2, 0, label); // Insert label at position 2
                 processedData[i] = row;
