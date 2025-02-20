@@ -72,7 +72,8 @@ self.onmessage = async function(event) {
                     processedData[i] = null;
                     continue;
                 }
-                const row = jsonData[i];
+                
+                const row = jsonData[i]; // Trim to 93 columns
                 // Optimize array operations
                 row.splice(2, 0, label); // Insert label at position 2
                 processedData[i] = row;
@@ -98,11 +99,7 @@ self.onmessage = async function(event) {
 
         processedFiles += batchResults.length;
         
-        // Report progress
-        self.postMessage({
-            type: 'progress',
-            progress: (processedFiles / urls.length) * 100
-        });
+
 
         if (endIndex < urls.length) {
             // Use requestAnimationFrame equivalent for workers
@@ -111,7 +108,7 @@ self.onmessage = async function(event) {
             // Optimize final data transfer
             self.postMessage({
                 type: 'complete',
-                data: allData.filter(Boolean) // Remove any null entries
+                data: allData // Remove any null entries
             });
         }
     }
