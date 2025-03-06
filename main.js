@@ -27,6 +27,7 @@
         var option = document.createElement("option");
         option.value = key;
         option.text = value;
+        option.setAttribute('data-i18n', key);
         selectElement.add(option);
     }
 
@@ -199,7 +200,7 @@ function createPizzaChart(rankData, playerName) {
     }
 
     // Define the labels and the corresponding ranks
-    const labels = Object.keys(rankData);
+    const labels = Object.keys(rankData).map(label => translateMetricName(label));
     const data = Object.values(rankData);
 
     // Color gradient function: interpolates between blue (low) and red (high)
@@ -1656,7 +1657,7 @@ const metricsHTML = metricsData.map(metric => {
 
         // Construct the HTML with the rank and suffix
         return `
-        ${metric.name} – ${playerRank}${rankSuffix}
+        ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
 <div class="rank-bar" onclick="toggleActive(this)">
     <div class="rank-bar-fill" style="width: ${rankBarWidth1}%; background-color: ${color}"></div>
         <span class="hover-content">${currentValue}</span>
@@ -1666,7 +1667,7 @@ const metricsHTML = metricsData.map(metric => {
           `;
     } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
     }
 }).join('');
 
@@ -2265,7 +2266,7 @@ metricsToCompute.forEach(metric => {
 document.getElementById('chartTitle').innerHTML = `
 <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
 <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-          <h1><i>vs ${selectedPlayer.league} ${titleSuffix} ${selectedPlayer.position}s, per 90</i></h1>
+          <h1><i>${translateTitle(selectedPlayer.league, titleSuffix, selectedPlayer.position, true)}</i></h1> 
               
  `;
 document.getElementById('chartButton').innerHTML = `
@@ -2295,7 +2296,7 @@ function populateMetricControls() {
 
         const label = document.createElement('label');
         label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(metric));
+        label.appendChild(document.createTextNode(translateMetricName(metric)));
         
         metricControlsDiv.appendChild(label);
 
@@ -2357,192 +2358,98 @@ updateChart();
 
 }
 else if (selectedSection === 'samePositionAndLeagueWithMinutes') {
-const samePositionAndLeagueAccelerations = calculateRankForMetric(samePositionAndLeague, 'accelerations');
 const samePositionAndLeagueAccelerationsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'accelerations', p => ({...p, accelerations: Math.round(p.accelerations * p.minutes / 90)}));
-const samePositionAndLeagueAccurateCrossesPercentage = calculateRankForMetric(samePositionAndLeague, 'accurateCrossesPercentage');
 const samePositionAndLeagueAccurateCrossesPercentageWithMinutes = calculateRankForMetric(samePositionAndLeague, 'accurateCrossesPercentage', p => ({...p}));
-const samePositionAndLeagueAccurateCrossesPerNinety = calculateRankForMetric(samePositionAndLeague, 'accurateCrossesPerNinety');
 const samePositionAndLeagueAccurateCrossesPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'accurateCrossesPerNinety', p => ({...p, accurateCrossesPerNinety: Math.round(p.accurateCrossesPerNinety * p.minutes / 90)}));
-const samePositionAndLeagueAccurateForwardPassesPercentage = calculateRankForMetric(samePositionAndLeague, 'accurateForwardPassesPercentage');
 const samePositionAndLeagueAccurateForwardPassesPercentageWithMinutes = calculateRankForMetric(samePositionAndLeague, 'accurateForwardPassesPercentage', p => ({...p}));
-const samePositionAndLeagueAccurateLongPassesPercentage = calculateRankForMetric(samePositionAndLeague, 'accurateLongPassesPercentage');
 const samePositionAndLeagueAccurateLongPassesPercentageWithMinutes = calculateRankForMetric(samePositionAndLeague, 'accurateLongPassesPercentage', p => ({...p}));
-const samePositionAndLeagueAccuratePassesPercentage = calculateRankForMetric(samePositionAndLeague, 'accuratePassesPercentage');
 const samePositionAndLeagueAccuratePassesPercentageWithMinutes = calculateRankForMetric(samePositionAndLeague, 'accuratePassesPercentage', p => ({...p}));
-const samePositionAndLeagueAccuratePassesToFinalThirdPercentage = calculateRankForMetric(samePositionAndLeague, 'accuratePassesToFinalThirdPercentage');
 const samePositionAndLeagueAccuratePassesToFinalThirdPercentageWithMinutes = calculateRankForMetric(samePositionAndLeague, 'accuratePassesToFinalThirdPercentage', p => ({...p}));
-const samePositionAndLeagueAccuratePassesToFinalThirdPerNinety = calculateRankForMetric(samePositionAndLeague, 'accuratePassesToFinalThirdPerNinety');
 const samePositionAndLeagueAccuratePassesToFinalThirdPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'accuratePassesToFinalThirdPerNinety', p => ({...p, accuratePassesToFinalThirdPerNinety: Math.round(p.accuratePassesToFinalThirdPerNinety * p.minutes / 90)}));
-const samePositionAndLeagueAccuratePassesToPenaltyAreaPercentage = calculateRankForMetric(samePositionAndLeague, 'accuratePassesToPenaltyAreaPercentage');
 const samePositionAndLeagueAccuratePassesToPenaltyAreaPercentageWithMinutes = calculateRankForMetric(samePositionAndLeague, 'accuratePassesToPenaltyAreaPercentage', p => ({...p}));
-const samePositionAndLeagueAccurateProgressivePassesPercentage = calculateRankForMetric(samePositionAndLeague, 'accurateProgressivePassesPercentage');
 const samePositionAndLeagueAccurateProgressivePassesPercentageWithMinutes = calculateRankForMetric(samePositionAndLeague, 'accurateProgressivePassesPercentage', p => ({...p}));
-const samePositionAndLeagueAccurateShortMediumPassesPercentage = calculateRankForMetric(samePositionAndLeague, 'accurateShortMediumPassesPercentage');
 const samePositionAndLeagueAccurateShortMediumPassesPercentageWithMinutes = calculateRankForMetric(samePositionAndLeague, 'accurateShortMediumPassesPercentage', p => ({...p}));
-const samePositionAndLeagueActions = calculateRankForMetric(samePositionAndLeague, 'defActions');
 const samePositionAndLeagueActionsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'defActions', p => ({...p, defActions: Math.round(p.defActions * p.minutes / 90)}));
-const samePositionAndLeagueAerialDuels = calculateRankForMetric(samePositionAndLeague, 'aerialDuels');
 const samePositionAndLeagueAerialDuelsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'aerialDuels', p => ({...p, aerialDuels: Math.round(p.aerialDuels * p.minutes / 90)}));
-const samePositionAndLeagueAerialDuelsWonPercentage = calculateRankForMetric(samePositionAndLeague, 'aerialDuelsWonPercentage');
 const samePositionAndLeagueAerialDuelsWonPercentageWithMinutes = calculateRankForMetric(samePositionAndLeague, 'aerialDuelsWonPercentage', p => ({...p}));
-const samePositionAndLeagueAerialDuelsWonPerNinety = calculateRankForMetric(samePositionAndLeague, 'aerialDuelsWonPerNinety');
 const samePositionAndLeagueAerialDuelsWonPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'aerialDuelsWonPerNinety', p => ({...p, aerialDuelsWonPerNinety: Math.round(p.aerialDuelsWonPerNinety * p.minutes / 90)}));
-const samePositionAndLeagueAssists = calculateRankForMetric(samePositionAndLeague, 'assists');
 const samePositionAndLeagueAssistsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'assists', p => ({...p, assists: Math.round(p.assists * p.minutes / 90)}));
-const samePositionAndLeagueBallCarryingFrequency = calculateRankForMetric(samePositionAndLeague, 'ballCarryingFrequency');
 const samePositionAndLeagueBallCarryingFrequencyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'ballCarryingFrequency');
-const samePositionAndLeagueChanceCreationRatio = calculateRankForMetric(samePositionAndLeague, 'chanceCreationRatio');
 const samePositionAndLeagueChanceCreationRatioWithMinutes = calculateRankForMetric(samePositionAndLeague, 'chanceCreationRatio');
-const samePositionAndLeagueCleanSheets = calculateRankForMetric(samePositionAndLeague, 'cleanSheets');
 const samePositionAndLeagueCleanSheetsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'cleanSheets');
-const samePositionAndLeagueCrosses = calculateRankForMetric(samePositionAndLeague, 'crosses');
-const samePositionAndLeagueCrossesToGoalieBox = calculateRankForMetric(samePositionAndLeague, 'crossesToGoalieBox');
 const samePositionAndLeagueCrossesToGoalieBoxWithMinutes = calculateRankForMetric(samePositionAndLeague, 'crossesToGoalieBox', p => ({...p, crossesToGoalieBox: Math.round(p.crossesToGoalieBox * p.minutes / 90)}));
 const samePositionAndLeagueCrossesWithMinutes = calculateRankForMetric(samePositionAndLeague, 'crosses', p => ({...p, crosses: Math.round(p.crosses * p.minutes / 90)}));
-const samePositionAndLeagueDeepCompletions = calculateRankForMetric(samePositionAndLeague, 'deepCompletions');
 const samePositionAndLeagueDeepCompletionsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'deepCompletions', p => ({...p, deepCompletions: Math.round(p.deepCompletions * p.minutes / 90)}));
-const samePositionAndLeagueDefensiveDuelsWonPercentage = calculateRankForMetric(samePositionAndLeague, 'defensiveDuelsWonPercentage');
 const samePositionAndLeagueDefensiveDuelsWonPercentageWithMinutes = calculateRankForMetric(samePositionAndLeague, 'defensiveDuelsWonPercentage', p => ({...p}));
-const samePositionAndLeagueDefensiveDuelsWonPerNinety = calculateRankForMetric(samePositionAndLeague, 'defensiveDuelsWonPerNinety');
 const samePositionAndLeagueDefensiveDuelsWonPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'defensiveDuelsWonPerNinety', p => ({...p, defensiveDuelsWonPerNinety: Math.round(p.defensiveDuelsWonPerNinety * p.minutes / 90)}));
-const samePositionAndLeagueDribbles = calculateRankForMetric(samePositionAndLeague, 'dribbles');
-const samePositionAndLeagueDribblesPerHundredTouches = calculateRankForMetric(samePositionAndLeague, 'dribblesPerHundredTouches');
 const samePositionAndLeagueDribblesPerHundredTouchesWithMinutes = calculateRankForMetric(samePositionAndLeague, 'dribblesPerHundredTouches');
 const samePositionAndLeagueDribblesWithMinutes = calculateRankForMetric(samePositionAndLeague, 'dribbles', p => ({...p, dribbles: Math.round(p.dribbles * p.minutes / 90)}));
-const samePositionAndLeagueDuels = calculateRankForMetric(samePositionAndLeague, 'defDuels');
-const samePositionAndLeagueDuelsPerNinety = calculateRankForMetric(samePositionAndLeague, 'duelsPerNinety');
 const samePositionAndLeagueDuelsPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'duelsPerNinety', p => ({...p, duelsPerNinety: Math.round(p.duelsPerNinety * p.minutes / 90)}));
 const samePositionAndLeagueDuelsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'defDuels', p => ({...p, defDuels: Math.round(p.defDuels * p.minutes / 90)}));
-const samePositionAndLeagueDuelsWonPercentage = calculateRankForMetric(samePositionAndLeague, 'duelsWonPercentage');
 const samePositionAndLeagueDuelsWonPercentageWithMinutes = calculateRankForMetric(samePositionAndLeague, 'duelsWonPercentage');
-const samePositionAndLeagueDuelsWonPerNinety = calculateRankForMetric(samePositionAndLeague, 'duelsWonPerNinety');
 const samePositionAndLeagueDuelsWonPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'duelsWonPerNinety', p => ({...p, duelsWonPerNinety: Math.round(p.duelsWonPerNinety * p.minutes / 90)}));
-const samePositionAndLeagueExits = calculateRankForMetric(samePositionAndLeague, 'exits');
 const samePositionAndLeagueExitsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'exits', p => ({...p, exits: Math.round(p.exits * p.minutes / 90)}));
-const samePositionAndLeagueForwardPasses = calculateRankForMetric(samePositionAndLeague, 'forwardPasses');
-const samePositionAndLeagueForwardPassesCompletedPerNinety = calculateRankForMetric(samePositionAndLeague, 'forwardPassesCompletedPerNinety');
 const samePositionAndLeagueForwardPassesCompletedPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'forwardPassesCompletedPerNinety', p => ({...p, forwardPassesCompletedPerNinety: Math.round(p.forwardPassesCompletedPerNinety * p.minutes / 90)}));
 const samePositionAndLeagueForwardPassesWithMinutes = calculateRankForMetric(samePositionAndLeague, 'forwardPasses', p => ({...p, forwardPasses: Math.round(p.forwardPasses * p.minutes / 90)}));
-const samePositionAndLeagueForwardPassRatio = calculateRankForMetric(samePositionAndLeague, 'forwardPassRatio');
 const samePositionAndLeagueForwardPassRatioWithMinutes = calculateRankForMetric(samePositionAndLeague, 'forwardPassRatio');
-const samePositionAndLeagueFoulsSuffered = calculateRankForMetric(samePositionAndLeague, 'foulsSuffered');
 const samePositionAndLeagueFoulsSufferedWithMinutes = calculateRankForMetric(samePositionAndLeague, 'foulsSuffered', p => ({...p, foulsSuffered: Math.round(p.foulsSuffered * p.minutes / 90)}));
-const samePositionAndLeagueGoalConversionPercentage = calculateRankForMetric(samePositionAndLeague, 'goalConversionPercentage');
 const samePositionAndLeagueGoalConversionPercentageWithMinutes = calculateRankForMetric(samePositionAndLeague, 'goalConversionPercentage', p => ({...p}));
-const samePositionAndLeagueGoals = calculateRankForMetric(samePositionAndLeague, 'goals');
-const samePositionAndLeagueGoalsAndAssistsPerNinety = calculateRankForMetric(samePositionAndLeague, 'goalsAndAssistsPerNinety');
 const samePositionAndLeagueGoalsAndAssistsPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'goalsAndAssistsPerNinety', p => ({...p, goalsAndAssistsPerNinety: Math.round(p.goalsAndAssistsPerNinety * p.minutes / 90)}));
-const samePositionAndLeagueGoalsMinusxGPerNinety = calculateRankForMetric(samePositionAndLeague, 'goalsMinusxGPerNinety');
 const samePositionAndLeagueGoalsMinusxGPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'goalsMinusxGPerNinety', p => ({...p, goalsMinusxGPerNinety: p.goalsMinusxGPerNinety * p.minutes / 90}));
-const samePositionAndLeagueGoalsPer100Touches = calculateRankForMetric(samePositionAndLeague, 'goalsPer100Touches');
 const samePositionAndLeagueGoalsPer100TouchesWithMinutes = calculateRankForMetric(samePositionAndLeague, 'goalsPer100Touches');
 const samePositionAndLeagueGoalsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'goals', p => ({...p, goals: Math.round(p.goals * p.minutes / 90)}));
-const samePositionAndLeagueHeadGoals = calculateRankForMetric(samePositionAndLeague, 'headGoals');
 const samePositionAndLeagueHeadGoalsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'headGoals', p => ({...p, headGoals: Math.round(p.headGoals * p.minutes / 90)}));
-const samePositionAndLeagueInterceptions = calculateRankForMetric(samePositionAndLeague, 'interceptions');
 const samePositionAndLeagueInterceptionsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'interceptions', p => ({...p, interceptions: Math.round(p.interceptions * p.minutes / 90)}));
-const samePositionAndLeagueKeyPasses = calculateRankForMetric(samePositionAndLeague, 'keyPasses');
 const samePositionAndLeagueKeyPassesWithMinutes = calculateRankForMetric(samePositionAndLeague, 'keyPasses', p => ({...p, keyPasses: Math.round(p.keyPasses * p.minutes / 90)}));
-const samePositionAndLeagueLongPasses = calculateRankForMetric(samePositionAndLeague, 'longPasses');
-const samePositionAndLeagueLongPassesCompletedPerNinety = calculateRankForMetric(samePositionAndLeague, 'longPassesCompletedPerNinety');
 const samePositionAndLeagueLongPassesCompletedPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'longPassesCompletedPerNinety', p => ({...p, longPassesCompletedPerNinety: Math.round(p.longPassesCompletedPerNinety * p.minutes / 90)}));
 const samePositionAndLeagueLongPassesWithMinutes = calculateRankForMetric(samePositionAndLeague, 'longPasses', p => ({...p, longPasses: Math.round(p.longPasses * p.minutes / 90)}));
-const samePositionAndLeagueNonPenaltyGoals = calculateRankForMetric(samePositionAndLeague, 'nonPenaltyGoals');
 const samePositionAndLeagueNonPenaltyGoalsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'nonPenaltyGoals', p => ({...p, nonPenaltyGoals: Math.round(p.nonPenaltyGoals * p.minutes / 90)}));
-const samePositionAndLeagueNpGoalsAndAssistsPerNinety = calculateRankForMetric(samePositionAndLeague, 'npGoalsAndAssistsPerNinety');
 const samePositionAndLeagueNpGoalsAndAssistsPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'npGoalsAndAssistsPerNinety', p => ({...p, npGoalsAndAssistsPerNinety: Math.round(p.npGoalsAndAssistsPerNinety * p.minutes / 90)}));
-const samePositionAndLeagueNpxGAndxAPerNinety = calculateRankForMetric(samePositionAndLeague, 'npxGAndxAPerNinety');
 const samePositionAndLeagueNpxGAndxAPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'npxGAndxAPerNinety', p => ({...p, npxGAndxAPerNinety: p.npxGAndxAPerNinety * p.minutes / 90}));
-const samePositionAndLeagueNpxGPerNinety = calculateRankForMetric(samePositionAndLeague, 'npxGPerNinety');
 const samePositionAndLeagueNpxGPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'npxGPerNinety', p => ({...p, npxGPerNinety: p.npxGPerNinety * p.minutes / 90}));
-const samePositionAndLeagueNpxGPerShot = calculateRankForMetric(samePositionAndLeague, 'npxGPerShot');
 const samePositionAndLeagueNpxGPerShotWithMinutes = calculateRankForMetric(samePositionAndLeague, 'npxGPerShot');
-const samePositionAndLeagueOffensiveDuels = calculateRankForMetric(samePositionAndLeague, 'offensiveDuels');
 const samePositionAndLeagueOffensiveDuelsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'offensiveDuels', p => ({...p, offensiveDuels: Math.round(p.offensiveDuels * p.minutes / 90)}));
-const samePositionAndLeagueOffensiveDuelsWonPercentage = calculateRankForMetric(samePositionAndLeague, 'offensiveDuelsWonPercentage');
 const samePositionAndLeagueOffensiveDuelsWonPercentageWithMinutes = calculateRankForMetric(samePositionAndLeague, 'offensiveDuelsWonPercentage', p => ({...p}));
-const samePositionAndLeagueOffensiveDuelsWonPerNinety = calculateRankForMetric(samePositionAndLeague, 'offensiveDuelsWonPerNinety');
 const samePositionAndLeagueOffensiveDuelsWonPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'offensiveDuelsWonPerNinety', p => ({...p, offensiveDuelsWonPerNinety: Math.round(p.offensiveDuelsWonPerNinety * p.minutes / 90)}));
-const samePositionAndLeaguePAdjInterceptions = calculateRankForMetric(samePositionAndLeague, 'pAdjInterceptions');
 const samePositionAndLeaguePAdjInterceptionsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'pAdjInterceptions');
-const samePositionAndLeaguePAdjSlidingTackles = calculateRankForMetric(samePositionAndLeague, 'pAdjSlidingTackles');
 const samePositionAndLeaguePAdjSlidingTacklesWithMinutes = calculateRankForMetric(samePositionAndLeague, 'pAdjSlidingTackles');
-const samePositionAndLeaguePasses = calculateRankForMetric(samePositionAndLeague, 'passes');
-const samePositionAndLeaguePassesCompletedPerNinety = calculateRankForMetric(samePositionAndLeague, 'passesCompletedPerNinety');
 const samePositionAndLeaguePassesCompletedPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'passesCompletedPerNinety', p => ({...p, passesCompletedPerNinety: Math.round(p.passesCompletedPerNinety * p.minutes / 90)}));
-const samePositionAndLeaguePassesToFinalThird = calculateRankForMetric(samePositionAndLeague, 'passesToFinalThird');
 const samePositionAndLeaguePassesToFinalThirdWithMinutes = calculateRankForMetric(samePositionAndLeague, 'passesToFinalThird', p => ({...p, passesToFinalThird: Math.round(p.passesToFinalThird * p.minutes / 90)}));
-const samePositionAndLeaguePassesToPenaltyArea = calculateRankForMetric(samePositionAndLeague, 'passesToPenaltyArea');
 const samePositionAndLeaguePassesToPenaltyAreaWithMinutes = calculateRankForMetric(samePositionAndLeague, 'passesToPenaltyArea', p => ({...p, passesToPenaltyArea: Math.round(p.passesToPenaltyArea * p.minutes / 90)}));
 const samePositionAndLeaguePassesWithMinutes = calculateRankForMetric(samePositionAndLeague, 'passes', p => ({...p, passes: Math.round(p.passes * p.minutes / 90)}));
-const samePositionAndLeaguePossessionPlusMinus = calculateRankForMetric(samePositionAndLeague, 'possessionPlusMinus');
 const samePositionAndLeaguePossessionPlusMinusWithMinutes = calculateRankForMetric(samePositionAndLeague, 'possessionPlusMinus');
-const samePositionAndLeaguePossessionsWonMinusLostPerNinety = calculateRankForMetric(samePositionAndLeague, 'possessionsWonMinusLostPerNinety');
 const samePositionAndLeaguePossessionsWonMinusLostPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'possessionsWonMinusLostPerNinety', p => ({...p, possessionsWonMinusLostPerNinety: Math.round(p.possessionsWonMinusLostPerNinety * p.minutes / 90)}));
-const samePositionAndLeaguePreAssistsPerNinety = calculateRankForMetric(samePositionAndLeague, 'preAssistsPerNinety');
 const samePositionAndLeaguePreAssistsPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'preAssistsPerNinety', p => ({...p, preAssistsPerNinety: Math.round(p.preAssistsPerNinety * p.minutes / 90)}));
-const samePositionAndLeaguePreventedGoals = calculateRankForMetric(samePositionAndLeague, 'preventedGoals');
 const samePositionAndLeaguePreventedGoalsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'preventedGoals', p => ({...p, preventedGoals: p.preventedGoals * p.minutes}));
-const samePositionAndLeagueProgressiveActionRate = calculateRankForMetric(samePositionAndLeague, 'progressiveActionRate');
 const samePositionAndLeagueProgressiveActionRateWithMinutes = calculateRankForMetric(samePositionAndLeague, 'progressiveActionRate');
-const samePositionAndLeagueProgressiveActionsPerNinety = calculateRankForMetric(samePositionAndLeague, 'progressiveActionsPerNinety');
 const samePositionAndLeagueProgressiveActionsPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'progressiveActionsPerNinety', p => ({...p, progressiveActionsPerNinety: Math.round(p.progressiveActionsPerNinety * p.minutes / 90)}));
-const samePositionAndLeagueProgressivePasses = calculateRankForMetric(samePositionAndLeague, 'progressivePasses');
-const samePositionAndLeagueProgressivePassesCompletedPerNinety = calculateRankForMetric(samePositionAndLeague, 'progressivePassesCompletedPerNinety');
 const samePositionAndLeagueProgressivePassesCompletedPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'progressivePassesCompletedPerNinety', p => ({...p, progressivePassesCompletedPerNinety: Math.round(p.progressivePassesCompletedPerNinety * p.minutes / 90)}));
-const samePositionAndLeagueProgressivePassesPAdj = calculateRankForMetric(samePositionAndLeague, 'progressivePassesPAdj');
 const samePositionAndLeagueProgressivePassesPAdjWithMinutes = calculateRankForMetric(samePositionAndLeague, 'progressivePassesPAdj');
 const samePositionAndLeagueProgressivePassesWithMinutes = calculateRankForMetric(samePositionAndLeague, 'progressivePasses', p => ({...p, progressivePasses: Math.round(p.progressivePasses * p.minutes / 90)}));
-const samePositionAndLeagueProgressiveRuns = calculateRankForMetric(samePositionAndLeague, 'progressiveRuns');
 const samePositionAndLeagueProgressiveRunsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'progressiveRuns', p => ({...p, progressiveRuns: Math.round(p.progressiveRuns * p.minutes / 90)}));
-const samePositionAndLeagueSaveRatePercentage = calculateRankForMetric(samePositionAndLeague, 'saveRatePercentage');
 const samePositionAndLeagueSaveRatePercentageWithMinutes = calculateRankForMetric(samePositionAndLeague, 'saveRatePercentage', p => ({...p}));
-const samePositionAndLeagueSavesPerNinety = calculateRankForMetric(samePositionAndLeague, 'savesPerNinety');
 const samePositionAndLeagueSavesPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'savesPerNinety', p => ({...p, savesPerNinety: Math.round(p.savesPerNinety * p.minutes / 90)}));
-const samePositionAndLeagueShortMediumPasses = calculateRankForMetric(samePositionAndLeague, 'shortMediumPasses');
 const samePositionAndLeagueShortMediumPassesWithMinutes = calculateRankForMetric(samePositionAndLeague, 'shortMediumPasses', p => ({...p, shortMediumPasses: Math.round(p.shortMediumPasses * p.minutes / 90)}));
-const samePositionAndLeagueShortPassesCompletedPerNinety = calculateRankForMetric(samePositionAndLeague, 'shortPassesCompletedPerNinety');
 const samePositionAndLeagueShortPassesCompletedPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'shortPassesCompletedPerNinety', p => ({...p, shortPassesCompletedPerNinety: Math.round(p.shortPassesCompletedPerNinety * p.minutes / 90)}));
-const samePositionAndLeagueShotAssists = calculateRankForMetric(samePositionAndLeague, 'shotAssists');
 const samePositionAndLeagueShotAssistsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'shotAssists', p => ({...p, shotAssists: Math.round(p.shotAssists * p.minutes / 90)}));
-const samePositionAndLeagueShotFrequency = calculateRankForMetric(samePositionAndLeague, 'shotFrequency');
 const samePositionAndLeagueShotFrequencyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'shotFrequency');
-const samePositionAndLeagueShots = calculateRankForMetric(samePositionAndLeague, 'shots');
-const samePositionAndLeagueShotsAgainst = calculateRankForMetric(samePositionAndLeague, 'shotsAgainst');
 const samePositionAndLeagueShotsAgainstWithMinutes = calculateRankForMetric(samePositionAndLeague, 'shotsAgainst', p => ({...p, shotsAgainst: Math.round(p.shotsAgainst * p.minutes / 90)}));
-const samePositionAndLeagueShotsBlocked = calculateRankForMetric(samePositionAndLeague, 'shotsBlocked');
 const samePositionAndLeagueShotsBlockedWithMinutes = calculateRankForMetric(samePositionAndLeague, 'shotsBlocked', p => ({...p, shotsBlocked: Math.round(p.shotsBlocked * p.minutes / 90)}));
-const samePositionAndLeagueShotsOnTargetPercentage = calculateRankForMetric(samePositionAndLeague, 'shotsOnTargetPercentage');
 const samePositionAndLeagueShotsOnTargetPercentageWithMinutes = calculateRankForMetric(samePositionAndLeague, 'shotsOnTargetPercentage', p => ({...p}));
-const samePositionAndLeagueShotsOnTargetPerNinety = calculateRankForMetric(samePositionAndLeague, 'shotsOnTargetPerNinety');
 const samePositionAndLeagueShotsOnTargetPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'shotsOnTargetPerNinety', p => ({...p, shotsOnTargetPerNinety: Math.round(p.shotsOnTargetPerNinety * p.minutes / 90)}));
 const samePositionAndLeagueShotsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'shots', p => ({...p, shots: Math.round(p.shots * p.minutes / 90)}));
-const samePositionAndLeagueSlidingTackles = calculateRankForMetric(samePositionAndLeague, 'slidingTackles');
 const samePositionAndLeagueSlidingTacklesWithMinutes = calculateRankForMetric(samePositionAndLeague, 'slidingTackles', p => ({...p, slidingTackles: Math.round(p.slidingTackles * p.minutes / 90)}));
-const samePositionAndLeagueSuccessfulAttackingActions = calculateRankForMetric(samePositionAndLeague, 'successfulAttackingActions');
 const samePositionAndLeagueSuccessfulAttackingActionsWithMinutes = calculateRankForMetric(samePositionAndLeague, 'successfulAttackingActions', p => ({...p, successfulAttackingActions: Math.round(p.successfulAttackingActions * p.minutes / 90)}));
-const samePositionAndLeagueSuccessfulDribblesPercentage = calculateRankForMetric(samePositionAndLeague, 'successfulDribblesPercentage');
 const samePositionAndLeagueSuccessfulDribblesPercentageWithMinutes = calculateRankForMetric(samePositionAndLeague, 'successfulDribblesPercentage', p => ({...p}));
-const samePositionAndLeagueSuccessfulDribblesPerNinety = calculateRankForMetric(samePositionAndLeague, 'successfulDribblesPerNinety');
 const samePositionAndLeagueSuccessfulDribblesPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'successfulDribblesPerNinety', p => ({...p, successfulDribblesPerNinety: Math.round(p.successfulDribblesPerNinety * p.minutes / 90)}));
-const samePositionAndLeagueThroughPasses = calculateRankForMetric(samePositionAndLeague, 'throughPasses');
-const samePositionAndLeagueThroughPassesCompletedPerNinety = calculateRankForMetric(samePositionAndLeague, 'throughPassesCompletedPerNinety');
 const samePositionAndLeagueThroughPassesCompletedPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'throughPassesCompletedPerNinety', p => ({...p, throughPassesCompletedPerNinety: Math.round(p.throughPassesCompletedPerNinety * p.minutes / 90)}));
 const samePositionAndLeagueThroughPassesWithMinutes = calculateRankForMetric(samePositionAndLeague, 'throughPasses', p => ({...p, throughPasses: Math.round(p.throughPasses * p.minutes / 90)}));
-const samePositionAndLeagueTouchesInBox = calculateRankForMetric(samePositionAndLeague, 'touchesInBox');
 const samePositionAndLeagueTouchesInBoxWithMinutes = calculateRankForMetric(samePositionAndLeague, 'touchesInBox', p => ({...p, touchesInBox: Math.round(p.touchesInBox * p.minutes / 90)}));
-const samePositionAndLeagueTouchesPerNinety = calculateRankForMetric(samePositionAndLeague, 'touchesPerNinety');
 const samePositionAndLeagueTouchesPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'touchesPerNinety', p => ({...p, touchesPerNinety: Math.round(p.touchesPerNinety * p.minutes / 90)}));
-const samePositionAndLeagueXA = calculateRankForMetric(samePositionAndLeague, 'xA');
-const samePositionAndLeagueXAPer100Passes = calculateRankForMetric(samePositionAndLeague, 'xAPer100Passes');
 const samePositionAndLeagueXAPer100PassesWithMinutes = calculateRankForMetric(samePositionAndLeague, 'xAPer100Passes');
 const samePositionAndLeagueXAWithMinutes = calculateRankForMetric(samePositionAndLeague, 'xA', p => ({...p, xA: p.xA * p.minutes}));
-const samePositionAndLeagueXG = calculateRankForMetric(samePositionAndLeague, 'xG');
-const samePositionAndLeagueXGAgainst = calculateRankForMetric(samePositionAndLeague, 'xGAgainst');
 const samePositionAndLeagueXGAgainstWithMinutes = calculateRankForMetric(samePositionAndLeague, 'xGAgainst', p => ({...p, xGAgainst: p.xGAgainst * p.minutes}));
-const samePositionAndLeagueXGAndxAPerNinety = calculateRankForMetric(samePositionAndLeague, 'xGAndxAPerNinety');
 const samePositionAndLeagueXGAndxAPerNinetyWithMinutes = calculateRankForMetric(samePositionAndLeague, 'xGAndxAPerNinety', p => ({...p, xGAndxAPerNinety: p.xGAndxAPerNinety * p.minutes / 90}));
-const samePositionAndLeagueXGPer100Touches = calculateRankForMetric(samePositionAndLeague, 'xGPer100Touches');
 const samePositionAndLeagueXGPer100TouchesWithMinutes = calculateRankForMetric(samePositionAndLeague, 'xGPer100Touches');
 const samePositionAndLeagueXGWithMinutes = calculateRankForMetric(samePositionAndLeague, 'xG', p => ({...p, xG: p.xG * p.minutes}));
 	const metricsData = [
@@ -3054,7 +2961,7 @@ const metricsHTML = metricsData.map(metric => {
 
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth2}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue2}</span>
@@ -3063,7 +2970,7 @@ const metricsHTML = metricsData.map(metric => {
           `;
     } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
     }
 }).join('');
 
@@ -3653,7 +3560,7 @@ metricsToCompute.forEach(metric => {
 document.getElementById('chartTitle').innerHTML = `
 <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
 <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-          <h1><i>vs ${selectedPlayer.league} ${titleSuffix} ${selectedPlayer.position}s</i></h1>
+          <h1><i>${translateTitle(selectedPlayer.league, titleSuffix, selectedPlayer.position)}</i></h1>  
               
  `;
 document.getElementById('chartButton').innerHTML = `
@@ -3683,7 +3590,7 @@ function populateMetricControls() {
 
         const label = document.createElement('label');
         label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(metric));
+        label.appendChild(document.createTextNode(translateMetricName(metric)));
         
         metricControlsDiv.appendChild(label);
 
@@ -4442,7 +4349,7 @@ const rankB = b.data.find(rank => rank.player === selectedPlayer.player && rank.
 
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth3}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue3}</span>                    
@@ -4451,7 +4358,7 @@ const rankB = b.data.find(rank => rank.player === selectedPlayer.player && rank.
           `;
     } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
     }
 }).join('');
 
@@ -5042,8 +4949,7 @@ metricsToCompute.forEach(metric => {
 document.getElementById('chartTitle').innerHTML = `
 <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
 <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-          <h1><i>vs All Leagues ${titleSuffix} ${selectedPlayer.position}s, per 90</i></h1>
-              
+<h1><i>${translateTitle("All Leagues", titleSuffix, selectedPlayer.position, true)}</i></h1>                
  `;
 document.getElementById('chartButton').innerHTML = `
        <div class="dropdown">
@@ -5071,7 +4977,7 @@ function populateMetricControls() {
 
         const label = document.createElement('label');
         label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(metric));
+        label.appendChild(document.createTextNode(translateMetricName(metric)));
         
         metricControlsDiv.appendChild(label);
 
@@ -5830,7 +5736,7 @@ const rankB = b.data.find(rank => rank.player === selectedPlayer.player && rank.
 
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth4}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue4}</span>
@@ -5839,7 +5745,7 @@ const rankB = b.data.find(rank => rank.player === selectedPlayer.player && rank.
           `;
     } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
     }
 }).join('');
 
@@ -6430,8 +6336,7 @@ metricsToCompute.forEach(metric => {
 document.getElementById('chartTitle').innerHTML = `
 <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
 <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-          <h1><i>vs All Leagues ${titleSuffix} ${selectedPlayer.position}s</i></h1>
-              
+<h1><i>${translateTitle("All Leagues", titleSuffix, selectedPlayer.position)}</i></h1>                
  `;
 document.getElementById('chartButton').innerHTML = `
        <div class="dropdown">
@@ -6458,7 +6363,7 @@ function populateMetricControls() {
 
         const label = document.createElement('label');
         label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(metric));
+        label.appendChild(document.createTextNode(translateMetricName(metric)));
         
         metricControlsDiv.appendChild(label);
 
@@ -7218,7 +7123,7 @@ const rankB = b.data.find(rank => rank.player === selectedPlayer.player && rank.
 
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth5}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue5}</span>
@@ -7227,7 +7132,7 @@ const rankB = b.data.find(rank => rank.player === selectedPlayer.player && rank.
           `;
     } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
     }
 }).join('');
 
@@ -7818,8 +7723,7 @@ metricsToCompute.forEach(metric => {
 document.getElementById('chartTitle').innerHTML = `
 <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
 <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-          <h1><i>vs ${selectedPlayer.league} ${titleSuffix} players, per 90</i></h1>
-              
+<h1><i>${translateTitle(selectedPlayer.league, titleSuffix, "Players", true)}</i></h1>                
  `;
 document.getElementById('chartButton').innerHTML = `
        <div class="dropdown">
@@ -7846,7 +7750,7 @@ function populateMetricControls() {
 
         const label = document.createElement('label');
         label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(metric));
+        label.appendChild(document.createTextNode(translateMetricName(metric)));
         
         metricControlsDiv.appendChild(label);
 
@@ -8606,7 +8510,7 @@ const rankB = b.data.find(rank => rank.player === selectedPlayer.player && rank.
 
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth6}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue6}</span>
@@ -8615,7 +8519,7 @@ const rankB = b.data.find(rank => rank.player === selectedPlayer.player && rank.
           `;
     } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
     }
 }).join('');
 
@@ -9205,7 +9109,7 @@ metricsToCompute.forEach(metric => {
 document.getElementById('chartTitle').innerHTML = `
 <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
 <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-          <h1><i>vs ${selectedPlayer.league} ${titleSuffix} players</i></h1>
+          <h1><i>${translateTitle(selectedPlayer.league, titleSuffix, "Players")}</i></h1>  
               
  `;
 document.getElementById('chartButton').innerHTML = `
@@ -9234,7 +9138,7 @@ function populateMetricControls() {
 
         const label = document.createElement('label');
         label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(metric));
+        label.appendChild(document.createTextNode(translateMetricName(metric)));
         
         metricControlsDiv.appendChild(label);
 
@@ -9993,7 +9897,7 @@ const metricsHTML = metricsData.map(metric => {
 
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth7}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue7}</span>
@@ -10002,7 +9906,7 @@ const metricsHTML = metricsData.map(metric => {
           `;
     } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
     }
 }).join('');
 
@@ -10594,8 +10498,7 @@ metricsToCompute.forEach(metric => {
 document.getElementById('chartTitle').innerHTML = `
 <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
 <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-        <h1><i>vs All Leagues ${titleSuffix} players, per 90</i></h1>
-            
+<h1><i>${translateTitle("All Leagues", titleSuffix, "Players", true)}</i></h1>              
  `;
 document.getElementById('chartButton').innerHTML = `
        <div class="dropdown">
@@ -10622,7 +10525,7 @@ function populateMetricControls() {
 
         const label = document.createElement('label');
         label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(metric));
+        label.appendChild(document.createTextNode(translateMetricName(metric)));
         
         metricControlsDiv.appendChild(label);
 
@@ -11380,7 +11283,7 @@ const rankB = b.data.find(rank => rank.player === selectedPlayer.player && rank.
 
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth8}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue8}</span>
@@ -11389,7 +11292,7 @@ const rankB = b.data.find(rank => rank.player === selectedPlayer.player && rank.
           `;
     } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
     }
 }).join('');
 // Construct player results HTML
@@ -11979,8 +11882,7 @@ metricsToCompute.forEach(metric => {
 document.getElementById('chartTitle').innerHTML = `
 <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
 <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-        <h1><i>vs All Leagues ${titleSuffix} players</i></h1>
-            
+<h1><i>${translateTitle("All Leagues", titleSuffix, "Players")}</i></h1>            
  `;
 document.getElementById('chartButton').innerHTML = `
        <div class="dropdown">
@@ -12008,7 +11910,7 @@ function populateMetricControls() {
 
         const label = document.createElement('label');
         label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(metric));
+        label.appendChild(document.createTextNode(translateMetricName(metric)));
         
         metricControlsDiv.appendChild(label);
 
