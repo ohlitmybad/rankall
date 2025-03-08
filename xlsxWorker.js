@@ -115,12 +115,12 @@ self.onmessage = async function(event) {
 
     // Helper function for position labels
     function getPositionLabel(fileIndex) {
-        if (fileIndex <= 2) return 'Goalkeeper';
-        if (fileIndex <= 5) return 'Centre-back';
-        if (fileIndex <= 8) return 'Full-back';
-        if (fileIndex <= 11) return 'Midfielder';
-        if (fileIndex <= 14) return 'Winger';
-        if (fileIndex <= 17) return 'Striker';
+        if (fileIndex <= 2) return 'Goalkeepers';
+        if (fileIndex <= 5) return 'Centre-backs';
+        if (fileIndex <= 8) return 'Full-backs';
+        if (fileIndex <= 11) return 'Midfielders';
+        if (fileIndex <= 14) return 'Wingers';
+        if (fileIndex <= 17) return 'Strikers';
         return 'Unknown';
     }
 
