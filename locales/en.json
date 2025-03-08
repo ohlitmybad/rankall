@@ -28,19 +28,19 @@
     "ligaPortugal": "Liga Portugal",
     "eredivisie": "Eredivisie"
     },
-    "positions": {
-      "goalkeeper": "Goalkeeper",
-      "centreback": "Centre-back",
-      "fullback": "Full-back",
-      "midfielder": "Midfielder",
-      "winger": "Winger",
-      "striker": "Striker",
-      "all": "Player"
-    },
-    "player_comparison": {
-      "title": "vs {league} {suffix} {position}s",
-      "per90": ", per 90"
-    },
+  "positions": {
+    "goalkeeper": "Goalkeeper",
+    "centreback": "Centre-back",
+    "fullback": "Full-back",
+    "midfielder": "Midfielder",
+    "winger": "Winger",
+    "striker": "Striker",
+    "all": "Player"
+  },
+  "player_comparison": {
+    "title": "vs {league} {suffix} {position}s",
+    "per90": ", per 90"
+  },
   "hover": {
     "per90": "Per 90 : Yes / No",
     "ascending": "Ascending : Yes / No"
