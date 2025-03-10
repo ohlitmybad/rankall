@@ -9,7 +9,17 @@
   "league": "vs League, per 90",
   "leagueWithMinutes": "vs League",
   "allCsv": "vs All Leagues, per 90",
-  "allCsvWithMinutes": "vs All Leagues, per 90",
+  "allCsvWithMinutes": "vs All Leagues",
+  "options": {
+    "samePositionAndLeague": "vs League and Position, per 90",
+    "samePositionAndLeagueWithMinutes": "vs League and Position",
+    "position": "vs All Leagues and Position, per 90",
+    "positionWithMinutes": "vs All Leagues and Position",
+    "league": "vs League, per 90",
+    "leagueWithMinutes": "vs League",
+    "allCsv": "vs All Leagues, per 90",
+    "allCsvWithMinutes": "vs All Leagues"
+  },
   "metrics": {
     "Goals": "Goals",
     "Assists": "Assists",
@@ -26,7 +36,8 @@
     "serieA": "Serie A",
     "ligue1": "Ligue 1",
     "ligaPortugal": "Liga Portugal",
-    "eredivisie": "Eredivisie"
+    "eredivisie": "Eredivisie",
+    "all": "All Leagues"
     },
   "positions": {
     "goalkeeper": "Goalkeeper",
