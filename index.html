@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.535, user-scalable=no"">
@@ -544,150 +544,164 @@ body.dark-mode #SFctr td {
     <script src="main.js"></script>
 
 <script>
-  function setHoverContent() {
-    const toggleButton = document.querySelector('.toggle-button');
-    const toggleSortingButton = document.querySelector('.toggleSortingButton');
-  
-    if (currentTranslations && currentTranslations.hover) {
-      toggleButton.setAttribute('data-hover', currentTranslations.hover.per90);
-      toggleSortingButton.setAttribute('data-hover', currentTranslations.hover.ascending);
-    }
+
+function setHoverContent() {
+  const toggleButton = document.querySelector('.toggle-button');
+  const toggleSortingButton = document.querySelector('.toggleSortingButton');
+
+  if (currentTranslations && currentTranslations.hover) {
+    toggleButton.setAttribute('data-hover', currentTranslations.hover.per90);
+    toggleSortingButton.setAttribute('data-hover', currentTranslations.hover.ascending);
   }
+}
+
+function translateLeague(league) {
+  if (!currentTranslations || !currentTranslations.leagues) return league;
+  // Handle special cases
+  if (league === "All Leagues") return currentTranslations.leagues.all;
   
-  function translateLeague(league) {
-    if (!currentTranslations || !currentTranslations.leagues) return league;
-    // Handle special cases
-    if (league === "Top 5 Leagues") return currentTranslations.leagues.top5;
-    if (league === "Top 7 Leagues") return currentTranslations.leagues.top7;
-    
-    const key = league.toLowerCase().replace(/\s+/g, '');
-    return currentTranslations.leagues[key] || league;
+  const key = league.toLowerCase().replace(/\s+/g, '');
+  return currentTranslations.leagues[key] || league;
+}
+
+function translatePosition(position) {
+  if (!currentTranslations || !currentTranslations.positions) return position;
+  if (position === "Player") return currentTranslations.positions.all;
+  const key = position.toLowerCase().replace(/[-\s]+/g, '');
+  return currentTranslations.positions[key] || position;
+}
+
+function translateTitle(league, suffix, position, includePer90 = false) {
+  if (!currentTranslations || !currentTranslations.player_comparison) {
+    return "vs " + league + " " + suffix + " " + position +"s" + (includePer90 ? ", per 90" : "");
   }
+  const template = currentTranslations.player_comparison.title;
+  const translatedLeague = translateLeague(league);
+  const translatedPosition = translatePosition(position);
+  const per90Text = includePer90 ? (currentTranslations.player_comparison.per90 || ", per 90") : "";
   
-  function translatePosition(position) {
-    if (!currentTranslations || !currentTranslations.positions) return position;
-    if (position === "Player") return currentTranslations.positions.all;
-    const key = position.toLowerCase().replace(/[-\s]+/g, '');
-    return currentTranslations.positions[key] || position;
+  return template
+    .replace('{league}', translatedLeague)
+    .replace('{suffix}', suffix)
+    .replace('{position}', translatedPosition) + per90Text;
+}
+
+let currentTranslations = null;
+
+function translateMetricName(metricName) {
+  if (currentTranslations && currentTranslations.metrics && currentTranslations.metrics[metricName]) {
+    return currentTranslations.metrics[metricName];
   }
-  
-  function translateTitle(league, suffix, position, includePer90 = false) {
-    if (!currentTranslations || !currentTranslations.player_comparison) {
-      return "vs " + league + " " + suffix + " " + position +"s" + (includePer90 ? ", per 90" : "");
-    }
-    const template = currentTranslations.player_comparison.title;
-    const translatedLeague = translateLeague(league);
-    const translatedPosition = translatePosition(position);
-    const per90Text = includePer90 ? (currentTranslations.player_comparison.per90 || ", per 90") : "";
-    
-    return template
-      .replace('{league}', translatedLeague)
-      .replace('{suffix}', suffix)
-      .replace('{position}', translatedPosition) + per90Text;
-  }
-  
-  let currentTranslations = null;
-  
-  function translateMetricName(metricName) {
-    if (currentTranslations && currentTranslations.metrics && currentTranslations.metrics[metricName]) {
-      return currentTranslations.metrics[metricName];
-    }
-    return metricName;
-  }
-  
-  function applyLanguage(language) {
-    fetch(`locales/${language}.json`)
-      .then(response => response.json())
-      .then(translations => {
-        currentTranslations = translations;  // Store translations globally
-        
-        // Handle elements with data-i18n attribute
-        document.querySelectorAll('[data-i18n]').forEach(element => {
-          const keys = element.getAttribute('data-i18n').split('.');
-          let value = translations;
-          for (const key of keys) {
-            value = value[key];
-          }
-          if (value) {
-            if (element.tagName === 'OPTION') {
-              element.text = value;
-              element.textContent = value;
-            } else if (element.tagName === 'META') {
-              element.setAttribute('content', value);
-            } else if (element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
-              element.setAttribute('placeholder', value);
-            } else {
-              element.textContent = value;
-            }
-          }
-          setHoverContent();
-        });
-  
-        // Handle metrics translation in text nodes
-        if (translations.metrics) {
-          const walker = document.createTreeWalker(
-            document.body,
-            NodeFilter.SHOW_TEXT,
-            {
-              acceptNode: function(node) {
-                // Skip script and style tags
-                if (node.parentNode.tagName === 'SCRIPT' || 
-                    node.parentNode.tagName === 'STYLE') {
-                  return NodeFilter.FILTER_REJECT;
-                }
-                return NodeFilter.FILTER_ACCEPT;
-              }
-            },
-            false
-          );
-  
-          let node;
-          while (node = walker.nextNode()) {
-            let text = node.nodeValue;
-            Object.entries(translations.metrics).forEach(([key, translation]) => {
-              const regex = new RegExp(`\\b${key}\\b(?=\\s*[–-])`, 'g');
-              text = text.replace(regex, translation);
-            });
-            node.nodeValue = text;
-          }
-        }
-  
-        // Trigger a re-render of the metrics if needed
-        if (window.displaySelectedPlayer) {
-          displaySelectedPlayer();
-        }
-      });
-  }
-  
-  function setLanguage(language) {
-    localStorage.setItem('preferredLanguage', language);
-    const url = new URL(window.location.href);
-    if (language === 'en') {
-      url.searchParams.delete('lang');
-    } else {
-      url.searchParams.set('lang', language);
-    }
-    window.history.pushState({}, '', url);
-    applyLanguage(language);
-  }
-  
+  return metricName;
+}
+
+
   function getPreferredLanguage() {
+    // PRIORITY 1: Check URL parameter first
     const urlParams = new URLSearchParams(window.location.search);
     const langParam = urlParams.get('lang');
     if (langParam) {
       return langParam;
     }
-    return localStorage.getItem('preferredLanguage') || getBrowserLanguage() || 'en';
+    // PRIORITY 2: Check localStorage
+    const storedLang = localStorage.getItem('preferredLanguage');
+    if (storedLang) {
+      return storedLang;
+    }
+    // PRIORITY 3: Use browser language
+    return getBrowserLanguage() || 'en';
   }
-  
+
   function getBrowserLanguage() {
     return navigator.language.slice(0, 2);
   }
+
+  function applyLanguage(language) {
+    console.log(language);
+
+    if (language === 'en') {
+      return;
+    }
+
+    
+    fetch(`locales/${language}.json`)
+      .then(response => {
+        // Don't throw an error, just return null if response is not OK
+        return response.ok ? response.json() : null;
+      })
+      .then(translations => {
+        // Only proceed if translations exist
+        if (translations) {
+          document.querySelectorAll('[data-i18n]').forEach(element => {
+            const keys = element.getAttribute('data-i18n').split('.');
+            let value = translations;
+            for (const key of keys) {
+              if (value === undefined || value === null) break;
+              value = value[key];
+            }
+            if (value) {
+              if (element.tagName === 'OPTION') {
+                element.text = value;
+                element.textContent = value;
+              } else if (element.tagName === 'META') {
+                element.setAttribute('content', value);
+              } else if (element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
+                element.setAttribute('placeholder', value);
+              } else if (value.includes('<')) {
+              element.innerHTML = value;
+              } else {
+                element.textContent = value;
+              }
+            }
+            setHoverContent();
+
+          });
+        }
+      })
+      .catch(() => {
+        // Completely empty catch block to silently ignore any errors
+      });
+
+          // Handle metrics translation in text nodes
+      if (translations.metrics) {
+        const walker = document.createTreeWalker(
+          document.body,
+          NodeFilter.SHOW_TEXT,
+          {
+            acceptNode: function(node) {
+              // Skip script and style tags
+              if (node.parentNode.tagName === 'SCRIPT' || 
+                  node.parentNode.tagName === 'STYLE') {
+                return NodeFilter.FILTER_REJECT;
+              }
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          },
+          false
+        );
+
+        let node;
+        while (node = walker.nextNode()) {
+          let text = node.nodeValue;
+          Object.entries(translations.metrics).forEach(([key, translation]) => {
+            const regex = new RegExp(`\\b${key}\\b(?=\\s*[–-])`, 'g');
+            text = text.replace(regex, translation);
+          });
+          node.nodeValue = text;
+        }
+      }
+
+      // Trigger a re-render of the metrics if needed
+      if (window.displaySelectedPlayer) {
+        displaySelectedPlayer();
+      }
+    }
   
-  // Export the translateMetricName function for use in other files
-  window.translateMetricName = translateMetricName; 
+    window.translateMetricName = translateMetricName; 
     const preferredLanguage = getPreferredLanguage();
     applyLanguage(preferredLanguage);
+  
+
   </script>
         
 </body>
