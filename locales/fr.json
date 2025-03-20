@@ -2,23 +2,23 @@
     "search": {
       "placeholder": "Rechercher un joueur..."
     },
-    "samePositionAndLeague": "vs Ligue et Position, par 90 min",
-    "samePositionAndLeagueWithMinutes": "vs Ligue et Position",
-    "position": "vs Toutes les Ligues et Position, par 90 min",
-    "positionWithMinutes": "vs Toutes les Ligues et Position",
+    "samePositionAndLeague": "vs Ligue + Position, par 90 min",
+    "samePositionAndLeagueWithMinutes": "vs Ligue + Position",
+    "position": "vs Monde + Position, par 90 min",
+    "positionWithMinutes": "vs Monde + Position",
     "league": "vs Ligue, par 90 min",
     "leagueWithMinutes": "vs Ligue",
-    "allCsv": "vs Toutes les Ligues, par 90 min",
-    "allCsvWithMinutes": "vs Toutes les Ligues",
+    "allCsv": "vs Monde, par 90 min",
+    "allCsvWithMinutes": "vs Monde",
     "options": {
-      "samePositionAndLeague": "vs Ligue et Position, par 90 min",
-      "samePositionAndLeagueWithMinutes": "vs Ligue et Position",
-      "position": "vs Toutes les Ligues et Position, par 90 min",
-      "positionWithMinutes": "vs Toutes les Ligues et Position",
+      "samePositionAndLeague": "vs Ligue + Position, par 90 min",
+      "samePositionAndLeagueWithMinutes": "vs Ligue + Position",
+      "position": "vs Monde + Position, par 90 min",
+      "positionWithMinutes": "vs Monde + Position",
       "league": "vs Ligue, par 90 min",
       "leagueWithMinutes": "vs Ligue",
-      "allCsv": "vs Toutes les Ligues, par 90 min",
-      "allCsvWithMinutes": "vs Toutes les Ligues"
+      "allCsv": "vs Monde, par 90 min",
+      "allCsvWithMinutes": "vs Monde"
     },
     "metrics": {
       "Goals": "Buts",
