@@ -135,10 +135,10 @@
     },
     "player_comparison": {
       "title": "vs {position} {suffix} de {league}",
-      "per90 min": ", par 90 min"
+      "per90": ", par 90 min"
     },
     "hover": {
-      "per90 min": "Par 90 min : Oui / Non",
+      "per90": "Par 90 min : Oui / Non",
       "ascending": "Ascendant : Oui / Non"
     }
   } 
