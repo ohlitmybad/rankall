@@ -646,7 +646,7 @@ function translateMetricName(metricName) {
       .then(translations => {
         // Only proceed if translations exist
         if (translations) {
-          currentTranslations = translations;
+	          currentTranslations = translations;	
           document.querySelectorAll('[data-i18n]').forEach(element => {
             const keys = element.getAttribute('data-i18n').split('.');
             let value = translations;
