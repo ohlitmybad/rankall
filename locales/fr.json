@@ -20,6 +20,12 @@
     "allCsv": "vs Monde, par 90 min",
     "allCsvWithMinutes": "vs Monde"
   },
+  "rankSuffixes": {
+    "st": "e",
+    "nd": "e",
+    "rd": "e",
+    "th": "e"
+  },
   "metrics": {
     "Goals": "Buts",
     "Assists": "Passes décisives",
