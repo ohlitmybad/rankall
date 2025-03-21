@@ -609,6 +609,12 @@ function translateMetricName(metricName) {
   return metricName;
 }
 
+function translateRankSuffix(suffix) {
+  if (currentTranslations && currentTranslations.rankSuffixes && currentTranslations.rankSuffixes[suffix]) {
+    return currentTranslations.rankSuffixes[suffix];
+  }
+  return suffix;
+}
 
   function getPreferredLanguage() {
     // PRIORITY 1: Check URL parameter first
@@ -646,7 +652,7 @@ function translateMetricName(metricName) {
       .then(translations => {
         // Only proceed if translations exist
         if (translations) {
-	          currentTranslations = translations;	
+          currentTranslations = translations;
           document.querySelectorAll('[data-i18n]').forEach(element => {
             const keys = element.getAttribute('data-i18n').split('.');
             let value = translations;
@@ -712,7 +718,8 @@ function translateMetricName(metricName) {
       }
     }
   
-    window.translateMetricName = translateMetricName; 
+    window.translateMetricName = translateMetricName;
+    window.translateRankSuffix = translateRankSuffix;
     const preferredLanguage = getPreferredLanguage();
     applyLanguage(preferredLanguage);
   
