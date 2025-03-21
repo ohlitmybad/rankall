@@ -566,6 +566,10 @@ function setHoverContent() {
   if (currentTranslations && currentTranslations.hover) {
     toggleButton.setAttribute('data-hover', currentTranslations.hover.per90);
     toggleSortingButton.setAttribute('data-hover', currentTranslations.hover.ascending);
+  } else {
+    // Default English hover text when no translations are available
+    toggleButton.setAttribute('data-hover', 'Per 90 : Yes / No');
+    toggleSortingButton.setAttribute('data-hover', 'Ascending : Yes / No');
   }
 }
 
