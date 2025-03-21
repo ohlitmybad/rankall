@@ -558,6 +558,15 @@ h1 {
     <script src="main.js"></script>
 
 <script>
+// Set default hover content immediately when DOM loads
+document.addEventListener('DOMContentLoaded', function() {
+  const toggleButton = document.querySelector('.toggle-button');
+  const toggleSortingButton = document.querySelector('.toggleSortingButton');
+  
+  // Set default English values
+  toggleButton.setAttribute('data-hover', 'Per 90 : Yes / No');
+  toggleSortingButton.setAttribute('data-hover', 'Ascending : Yes / No');
+});
 
 function setHoverContent() {
   const toggleButton = document.querySelector('.toggle-button');
@@ -566,10 +575,6 @@ function setHoverContent() {
   if (currentTranslations && currentTranslations.hover) {
     toggleButton.setAttribute('data-hover', currentTranslations.hover.per90);
     toggleSortingButton.setAttribute('data-hover', currentTranslations.hover.ascending);
-  } else {
-    // Default English hover text when no translations are available
-    toggleButton.setAttribute('data-hover', 'Per 90 : Yes / No');
-    toggleSortingButton.setAttribute('data-hover', 'Ascending : Yes / No');
   }
 }
 
