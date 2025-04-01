@@ -449,23 +449,21 @@ h1 {
   }
 }
 
-	body.dark-mode #SFctr {
-color: #ffffff !important
-}
-
-
-#SFctr input {
-    background-color: #ffffff !important;
-color:#000000 !important;
-border: 1px solid #c2c2c2 !important
-}
-	
+    body.dark-mode #SFctr {
+        color: #ffffff !important
+        }
+        
+        
+        #SFctr input {
+            background-color: #ffffff !important;
+        color:#000000 !important;
+        border: 1px solid #c2c2c2 !important
+        }
 
 #SFctr {
 	font-family: Arial, Helvetica, sans-serif !important;
+	color: #000000 !important;
   margin-left: 4px;
-	color: #000000 !important
-
 }
 
 #SFusrlogpst strong:first-child {
@@ -501,21 +499,21 @@ border: 1px solid #c2c2c2 !important
   top: -15px;
 }
 	
-
+.membershipworksplaceholder{
+  height: 13px;
+}
 	
   </style>
 </head>
 
 <body>
 		<div class="loading-container" id="loadingContainer">
-      <div class="loading-text" data-i18n="loading">Loading data...</div>
-      <div class="loading-bar">
+  <div class="loading-text" data-i18n="loading">Loading data...</div>
+  <div class="loading-bar">
     <div class="loading-progress"></div>
   </div>
 </div>
-<script type="text/javascript">document.body.style.visibility="hidden";</script><div id="SFctr" data-org="31002" data-mfl="64c215764c0b6076026762a3"><div style="clear:both"></div></div><script type="text/javascript" src="https://cdn.membershipworks.com/mfl.js"></script>
-
-
+<div id="membershipworksPlaceholder" class="membershipworksplaceholder"></div>
     <div class="spinner" id="spinner">
   <div class="spinner-icon"></div>
 </div>
@@ -747,6 +745,33 @@ function translateRankSuffix(suffix) {
   
 
   </script>
-        
+<script>
+  function loadMembershipworks() {
+    const container = document.getElementById('membershipworksPlaceholder');
+    document.body.style.visibility = "hidden";
+    container.innerHTML = '<div id="SFctr" data-org="31002" data-mfl="64c215764c0b6076026762a3"><div style="clear:both"></div></div>';
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://cdn.membershipworks.com/mfl.js';
+    document.body.appendChild(script);
+  }
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    const originalHideLoadingContainer = document.getElementById('loadingContainer').style.display;
+        const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.target.style.display === 'none' && mutation.target.id === 'loadingContainer') {
+          setTimeout(loadMembershipworks, 10);
+          observer.disconnect();
+        }
+      });
+    });
+       observer.observe(document.getElementById('loadingContainer'), { 
+      attributes: true,
+      attributeFilter: ['style']
+    });
+
+  });
+</script>
 </body>
 </html>
