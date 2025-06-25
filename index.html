@@ -503,6 +503,34 @@ h1 {
   height: 15px;
 }
 	
+.autocomplete-items {
+  position: absolute;
+  border-top: none;
+  z-index: 99;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.autocomplete-items:empty {
+  border: none;
+  /* or border: 0; */
+}
+.autocomplete-items {
+  border: 1px solid #d4d4d4;
+  /* other styles as needed */
+}
+.autocomplete-item {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-item:hover, .autocomplete-active {
+  background-color: #e9e9e9;
+}
   </style>
 </head>
 
@@ -517,15 +545,11 @@ h1 {
     <div class="spinner" id="spinner">
   <div class="spinner-icon"></div>
 </div>
-  <div class="combo-box">
-    <input type="text" id="searchInput" class="search-bar" placeholder="Search for a player..." data-i18n="search.placeholder">    <div class="custom-dropdown">
-      <select id="playerSelect" class="search-bar">
-        <option value="" disabled selected></option>
-        <!-- Options will be dynamically added here -->
-      </select>
-    </div>
-  </div>
-  
+<div class="combo-box">
+  <input type="text" id="searchInput" class="search-bar" placeholder="Search for a player..." data-i18n="search.placeholder" autocomplete="off">
+  <div id="autocomplete-list" class="autocomplete-items"></div>
+<select id="playerSelect" style="display:none;"></select>
+</div>
   
   <select id="sectionSelect" class="select-style">
   </select>
