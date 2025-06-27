@@ -494,11 +494,16 @@ h1 {
   position: absolute;
   font-size: 12px;
   font-weight: 400;
-  left: 80px;
+  left: 100px;
   white-space: nowrap; /* Prevent text from wrapping */
   top: -15px;
 }
-	
+	/* Move "Forgot Password?" text more to the left on small screens */
+@media (max-width : 757px) {
+  #SFusrlogpwd strong::after {
+    left: 20px; /* Reduced from 100px to 60px for small screens */
+  }
+}
 .membershipworksplaceholder{
   height: 15px;
 }
