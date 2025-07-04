@@ -144,8 +144,8 @@
     "Passes to fin 3rd": "Passes vers dernier tiers",
     "Passes to pen box": "Passes vers surface",
     "Through passes comp": "Passes en profondeur réussies",
-    "Pass %": "Passes réussies %",
-    "Forward pass %": "Taux passes vers l'avant",
+    "Pass %": "Passes %",
+    "Forward pass %": "Passes en avant %",
     "Short pass %": "Passes courtes %",
     "Progressive pass %": "Passes prog %",
     "Long pass %": "Passes longues %",
@@ -175,6 +175,15 @@
     "striker": "Buteur",
     "all": "Joueur"
   },
+  "positions_plural": {
+    "goalkeeper": "Gardiens",
+    "centreback": "Défenseurs centraux",
+    "fullback": "Latéraux",
+    "midfielder": "Milieux",
+    "winger": "Ailiers",
+    "striker": "Buteurs",
+    "all": "Joueurs"
+  },
   "player_comparison": {
     "title": "vs {position} {suffix} de {league}",
     "per90": ", par 90 min"
@@ -182,6 +191,13 @@
   "hover": {
     "per90": "Par 90 min : Oui / Non",
     "ascending": "Ascendant : Oui / Non"
+  },
+  "buttons": {
+    "show_ascending_ranks": "Rangs ascendants",
+    "edit_graphs": "Modifier graphiques",
+    "switch_to_per90": "Basculer vers 90'",
+    "switch_to_total": "Basculer vers Total",
+    "switch_to_past_season": "Saison précédente"
   },
   "loading": "Chargement des données..."
 } 
